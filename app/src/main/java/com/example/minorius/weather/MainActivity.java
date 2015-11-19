@@ -19,6 +19,9 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity {
 
     private TextView textView;
+    private TextView textView2;
+    private TextView textView3;
+    private TextView textView4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textView = (TextView) findViewById(R.id.textView);
+        textView2 = (TextView) findViewById(R.id.textView2);
+        textView3 = (TextView) findViewById(R.id.textView3);
+        textView4 = (TextView) findViewById(R.id.textView4);
 
         new GetData().execute();
     }
@@ -72,11 +78,20 @@ public class MainActivity extends AppCompatActivity {
             try{
                 dataJsonObj = new JSONObject((String) o);
                 JSONArray list = dataJsonObj.getJSONArray("list");
-
                 for(int i = 0; i < list.length(); i++){
                     JSONObject element = list.getJSONObject(i);
-                    textView.setText(i+", ");
+                    JSONObject main = element.getJSONObject("main");
+                    int humidity = main.getInt("humidity");
+                    int temp_min = main.getInt("temp_min");
+                    int temp_max = main.getInt("temp_max");
+                    int temp = main.getInt("temp");
+
+                    textView.setText(""+humidity);
+                    textView2.setText(""+temp_min);
+                    textView3.setText(""+temp_max);
+                    textView4.setText(""+temp);
                 }
+
             }
             catch (Exception e){
                 Toast.makeText(getApplicationContext(), "error "+e, Toast.LENGTH_LONG).show();
