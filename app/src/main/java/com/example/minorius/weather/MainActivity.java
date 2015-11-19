@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -54,16 +58,30 @@ public class MainActivity extends AppCompatActivity {
                 result = buffer.toString();
 
             }catch (Exception e){
-                Toast.makeText(getApplicationContext(), "Eror", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             }
 
             return result;
         }
 
         @Override
-        protected void onPostExecute(Object o) {
+        protected void onPostExecute(Object o){
             super.onPostExecute(o);
-            textView.setText(result);
+            JSONObject dataJsonObj = null;
+
+            try{
+                dataJsonObj = new JSONObject((String) o);
+                JSONArray list = dataJsonObj.getJSONArray("list");
+
+                for(int i = 0; i < list.length(); i++){
+                    JSONObject element = list.getJSONObject(i);
+                    textView.setText(i+", ");
+                }
+            }
+            catch (Exception e){
+                Toast.makeText(getApplicationContext(), "error "+e, Toast.LENGTH_LONG).show();
+            }
+
         }
     }
 }
